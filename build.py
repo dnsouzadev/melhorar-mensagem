@@ -29,7 +29,7 @@ CONTEUDO_LIVRE = [
 ]
 
 GECKO_ID = "melhorar-mensagem@daniel"  # identificador único do Firefox (não precisa ser e-mail)
-GECKO_MIN = "115.0"  # primeiro Firefox com MV3 estável
+GECKO_MIN = "142.0"  # mínimo que suporta "data_collection_permissions" (exigido pela Mozilla)
 
 
 def copiar_conteudo(para: Path) -> None:
@@ -79,9 +79,12 @@ def main() -> None:
     copiar_conteudo(pasta_fx)
     m = json.loads(json.dumps(manifest_base))  # cópia profunda
     m["background"] = {"scripts": ["background.js"]}  # Firefox: event page, não service worker
-    m["browser_specific_settings"] = {
-        "gecko": {"id": GECKO_ID, "strict_min_version": GECKO_MIN}
-    }
+    gecko = {"id": GECKO_ID, "strict_min_version": GECKO_MIN}
+    # Requisito novo da Mozilla: declaração de coleta de dados. A extensão
+    # não coleta nada (o texto selecionado vai apenas ao provedor que o
+    # usuário escolher, em ação dele). "none" declara isso ao Firefox.
+    gecko["data_collection_permissions"] = {"required": ["none"]}
+    m["browser_specific_settings"] = {"gecko": gecko}
     gravar_json(m, pasta_fx / "manifest.json")
     zipar(pasta_fx, DIST / "firefox.zip")
 

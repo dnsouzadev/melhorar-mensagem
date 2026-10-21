@@ -9,7 +9,7 @@ Selecione o texto → clique com o direito → escolha o estilo → o texto é s
 
 🆓 IA local no navegador (Chrome 138+, sem chave) · 🔑 ou sua API favorita (OpenAI, Groq, OpenRouter, Ollama…)
 
-[![pt-BR](https://img.shields.io/badge/idioma-pt--BR-purple)](README.md) [![en](https://img.shields.io/badge/lang-English-purple)](README.en.md) [![Chrome 138+](https://img.shields.io/badge/Chrome-138%2B-4285F4?logo=googlechrome&logoColor=white)] [![Firefox 115+](https://img.shields.io/badge/Firefox-115%2B-FF7139?logo=firefox&logoColor=white)] [![Manifest V3](https://img.shields.io/badge/manifest-3.0-blueviolet)] [![License: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)](LICENSE)
+[![pt-BR](https://img.shields.io/badge/idioma-pt--BR-purple)](README.md) [![en](https://img.shields.io/badge/lang-English-purple)](README.en.md) [![Chrome 138+](https://img.shields.io/badge/Chrome-138%2B-4285F4?logo=googlechrome&logoColor=white)] [![Firefox 142+](https://img.shields.io/badge/Firefox-142%2B-FF7139?logo=firefox&logoColor=white)] [![Manifest V3](https://img.shields.io/badge/manifest-3.0-blueviolet)] [![License: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)](LICENSE)
 
 </div>
 

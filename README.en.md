@@ -9,7 +9,7 @@ Select the text → right-click → pick a style → the text is replaced in pla
 
 🆓 On-device AI (Chrome 138+, no API key) · 🔑 or your favorite API (OpenAI, Groq, OpenRouter, Ollama…)
 
-[![pt-BR](https://img.shields.io/badge/lang-pt--BR-purple)](README.md) [![en](https://img.shields.io/badge/language-English-purple)](README.en.md) [![Chrome 138+](https://img.shields.io/badge/Chrome-138%2B-4285F4?logo=googlechrome&logoColor=white)] [![Firefox 115+](https://img.shields.io/badge/Firefox-115%2B-FF7139?logo=firefox&logoColor=white)] [![Manifest V3](https://img.shields.io/badge/manifest-3.0-blueviolet)] [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![pt-BR](https://img.shields.io/badge/lang-pt--BR-purple)](README.md) [![en](https://img.shields.io/badge/language-English-purple)](README.en.md) [![Chrome 138+](https://img.shields.io/badge/Chrome-138%2B-4285F4?logo=googlechrome&logoColor=white)] [![Firefox 142+](https://img.shields.io/badge/Firefox-142%2B-FF7139?logo=firefox&logoColor=white)] [![Manifest V3](https://img.shields.io/badge/manifest-3.0-blueviolet)] [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 </div>
 

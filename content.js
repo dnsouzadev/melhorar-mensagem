@@ -341,18 +341,23 @@ function toast(msg, tipo = "ok", duracao = 2600) {
   host.style.cssText =
     "all:initial;position:fixed;z-index:2147483647;left:50%;bottom:28px;transform:translateX(-50%);";
   const shadow = host.attachShadow({ mode: "open" });
+
+  // CSS via style.textContent e texto via textContent: sem innerHTML dinâmico.
+  const estilo = document.createElement("style");
+  estilo.textContent = [
+    ".pill { color:#fff;font:14px/1.4 system-ui,sans-serif;padding:10px 16px;",
+    "border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:70vw;",
+    "opacity:0;transition:opacity .18s ease;pointer-events:none;",
+    "white-space:pre-wrap;text-align:center }",
+    ".ok { opacity:1 }",
+  ].join("\n");
   const cor = tipo === "erro" ? "#7f1d1d" : tipo === "processo" ? "#1e293b" : "#111827";
-  shadow.innerHTML = `
-    <style>
-      .pill { background:${cor};color:#fff;font:14px/1.4 system-ui,sans-serif;padding:10px 16px;
-              border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.35);
-              max-width:70vw;opacity:0;transition:opacity .18s ease;pointer-events:none;
-              white-space:pre-wrap;text-align:center }
-      .ok { opacity:1 }
-    </style>
-    <div class="pill">${escapeHtml(msg)}</div>`;
+  const pill = document.createElement("div");
+  pill.className = "pill";
+  pill.textContent = msg;
+  pill.style.background = cor;
+  shadow.append(estilo, pill);
   document.documentElement.appendChild(host);
-  const pill = shadow.querySelector(".pill");
   requestAnimationFrame(() => pill.classList.add("ok"));
 
   let removido = false;
@@ -369,24 +374,11 @@ function toast(msg, tipo = "ok", duracao = 2600) {
     fim: (novoMsg, novoTipo = "ok", novoDur = 2600) => {
       if (timer) clearTimeout(timer);
       pill.textContent = novoMsg;
-      if (novoTipo === "erro") pill.style.background = "#7f1d1d";
-      else if (novoTipo !== "processo") pill.style.background = "#111827";
+      pill.style.background = novoTipo === "erro" ? "#7f1d1d" : "#111827";
       pill.classList.add("ok");
       timer = setTimeout(fechar, novoDur);
     },
   };
-}
-
-function escapeHtml(t) {
-  return String(t).replace(/[&<>"']/g, (c) =>
-    ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    }[c])
-  );
 }
 
 /* ------------------------------------------------------------------ */

@@ -252,9 +252,13 @@ api.storage.local.get({ setupDone: false }).then((cfg) => {
   const sair = document.createElement("p");
   sair.className = "ajuda";
   sair.style.marginTop = "18px";
-  sair.innerHTML = '<a href="#" id="sairSemConfigurar">Quero configurar depois, com as opções padrão</a>';
+  const link = document.createElement("a");
+  link.href = "#";
+  link.id = "sairSemConfigurar";
+  link.textContent = "Quero configurar depois, com as opções padrão";
+  sair.appendChild(link);
   passo0.appendChild(sair);
-  sair.querySelector("a").addEventListener("click", async (e) => {
+  link.addEventListener("click", async (e) => {
     e.preventDefault();
     // Padrão: IA do navegador (funciona automaticamente nos Chrome compatíveis).
     await api.storage.local.set({ setupDone: true, temperature: 0.3 });

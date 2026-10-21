@@ -3,6 +3,15 @@
 Formato semelhante ao [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.1] - 2026-10-20
+
+### Corrigido
+
+- Toast do content script construído via DOM (sem `innerHTML` dinâmico),
+  alinhado com a política de segurança da Mozilla.
+- Manifesto do Firefox declara `data_collection_permissions: none`
+  (obrigatório para novas submissões no AMO).
+
 ## [0.5.0] - 2026-10-20
 
 ### Adicionado
