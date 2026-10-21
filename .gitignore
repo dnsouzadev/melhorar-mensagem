@@ -1,0 +1,11 @@
+# Pacotes gerados para publicação
+dist/
+
+# Sistema
+.DS_Store
+Thumbs.db
+__pycache__/
+
+# Segredos locais por engano (nunca devem estar no repo)
+*.key
+.env

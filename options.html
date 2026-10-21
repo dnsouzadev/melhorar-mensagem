@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Melhorar Mensagem — Opções</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      font: 15px/1.5 system-ui, sans-serif;
+      max-width: 560px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p.dica { color: #888; margin: 0 0 28px; font-size: 14px; }
+    .campo { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    .ajuda { color: #888; font-size: 13px; margin: 4px 0 0; }
+    input, select {
+      width: 100%; padding: 9px 12px; border-radius: 8px;
+      border: 1px solid #ccc; font: inherit; background: transparent;
+    }
+    input:focus, select:focus { outline: 2px solid #4f46e5; border-color: transparent; }
+    .botoes { display: flex; gap: 10px; margin-top: 26px; }
+    button {
+      padding: 10px 18px; border: 0; border-radius: 8px; font: inherit;
+      font-weight: 600; cursor: pointer;
+    }
+    #salvar { background: #4f46e5; color: #fff; }
+    #testar { background: #e5e7eb; }
+    #status { margin-top: 18px; min-height: 24px; font-size: 14px; }
+    .ok { color: #16a34a; }
+    .erro { color: #dc2626; }
+    details { margin-top: 20px; }
+    summary { cursor: pointer; font-weight: 600; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>✨ Melhorar Mensagem</h1>
+  <p class="dica">
+    Escolha o serviço de IA e informe a chave (API key). Tudo fica salvo apenas neste navegador.
+  </p>
+
+  <div class="campo">
+    <label for="provider">Provedor</label>
+    <select id="provider">
+      <option value="openai">OpenAI (ChatGPT) — pago</option>
+      <option value="groq">Groq — rápido e tem nível grátis</option>
+      <option value="openrouter">OpenRouter — vários modelos (alguns grátis)</option>
+      <option value="ollama">Ollama local — Grátis, sem nuvem</option>
+      <option value="custom">Personalizado (endpoint compatível com OpenAI)</option>
+    </select>
+  </div>
+
+  <div class="campo">
+    <label for="apiKey">Chave da API</label>
+    <input id="apiKey" type="password" placeholder="sk-… (deixe vazio para Ollama local)" autocomplete="off" />
+    <p class="ajuda" id="dicaChave">Obtenha a chave no painel do provedor escolhido.</p>
+  </div>
+
+  <details>
+    <summary>Avançado</summary>
+
+    <div class="campo">
+      <label for="model">Modelo</label>
+      <input id="model" type="text" placeholder="ex.: gpt-4o-mini" />
+    </div>
+
+    <div class="campo">
+      <label for="baseUrl">Endereço da API (base URL)</label>
+      <input id="baseUrl" type="text" placeholder="ex.: https://api.openai.com/v1" />
+    </div>
+
+    <div class="campo">
+      <label for="temperature">Criatividade: <span id="tempValor">0.3</span></label>
+      <input id="temperature" type="range" min="0" max="1" step="0.1" />
+      <p class="ajuda">Menos criatividade = texto mais fiel ao original. Recomendado: 0.2–0.4.</p>
+    </div>
+  </details>
+
+  <div class="botoes">
+    <button id="salvar" type="button">Salvar</button>
+    <button id="testar" type="button">Testar conexão</button>
+  </div>
+  <div id="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

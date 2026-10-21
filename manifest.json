@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Melhorar Mensagem",
+  "version": "0.1.0",
+  "description": "Selecionou, clicou com o direito, melhorou: corrige ortografia e reformula sua mensagem com IA antes de enviar.",
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "permissions": ["contextMenus", "storage"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ],
+  "options_ui": { "page": "options.html", "open_in_tab": true }
+}
