@@ -3,6 +3,16 @@
 Formato semelhante ao [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.2.0] - 2026-10-20
+
+### Adicionado
+
+- Provedor "IA do navegador" (padrão): Prompt API do Chrome 138+ com Gemini Nano
+  local, sem chave e sem custo; download do modelo pela página de opções com
+  barra de progresso e teste de conexão.
+- Fallback automático: se o content script não tiver acesso à API, o prompt é
+  processado pelo service worker da extensão.
+
 ## [0.1.0] - 2026-10-20
 
 ### Adicionado

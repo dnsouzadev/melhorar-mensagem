@@ -21,7 +21,7 @@ const PRESETS = {
 
 /* Espelho dos padrões de options.js (sem processo de build, ficam duplicados) */
 const DEFAULTS = {
-  provider: "openai",
+  provider: "navegador",
   baseUrl: PRESETS.openai.baseUrl,
   apiKey: "",
   model: PRESETS.openai.model,
@@ -83,7 +83,10 @@ async function melhorar() {
   toast("Melhorando…", "processo", 45000);
   try {
     const cfg = await config();
-    const melhorado = await chamarIA(cfg, selecao.texto);
+    const melhorado =
+      cfg.provider === "navegador"
+        ? await iaNavegador(selecao.texto, cfg.temperature)
+        : await chamarIA(cfg, selecao.texto);
     aplicar(selecao, melhorado);
     toast("✅ Mensagem melhorada (Ctrl+Z desfaz)", "ok");
   } catch (err) {
@@ -128,6 +131,61 @@ async function config() {
   if (preset && !dados.baseUrl) dados.baseUrl = preset.baseUrl;
   if (preset && !dados.model) dados.model = preset.model;
   return dados;
+}
+
+/* ------------------------------------------------------------------ */
+/* IA do navegador (Chrome 138+: modelo Gemini Nano baixado no PC)     */
+/* ------------------------------------------------------------------ */
+
+async function iaNavegador(texto, temperatura) {
+  // A API Prompt pode não estar exposta no content script dependendo da
+  // versão do Chrome; nesse caso delegamos ao service worker da extensão.
+  if (typeof LanguageModel !== "undefined") return promptLocal(texto, temperatura);
+
+  const resp = await api.runtime.sendMessage({
+    type: "navegador-prompt",
+    texto,
+    temperature: Number(temperatura) || 0.3,
+  });
+  if (!resp || !resp.ok) {
+    throw new Error((resp && resp.erro) || "IA do navegador indisponível neste contexto.");
+  }
+  return resp.texto;
+}
+
+async function promptLocal(texto, temperatura) {
+  const estado = await LanguageModel.availability();
+  if (estado === "unavailable") {
+    throw new Error(
+      "IA do navegador indisponível neste dispositivo (requer Chrome 138+ e hardware compatível)."
+    );
+  }
+  if (estado === "downloadable" || estado === "downloading") {
+    throw new Error("O modelo local ainda não está pronto — abra as Opções da extensão e clique em “Baixar modelo”.");
+  }
+
+  // Em extensões, temperatura tem que ir junto com topK (ou nenhum dos dois).
+  let params = null;
+  try { params = await LanguageModel.params(); } catch { /* segue sem ajuste */ }
+
+  let opcoes = { initialPrompts: [{ role: "system", content: SYSTEM_PROMPT }] };
+  if (params) {
+    opcoes.topK = params.defaultTopK;
+    opcoes.temperature = Math.min(
+      params.defaultTemperature * (0.5 + (Number(temperatura) || 0.3)),
+      params.maxTemperature
+    );
+  }
+
+  let sessao;
+  try {
+    sessao = await LanguageModel.create(opcoes);
+  } catch {
+    sessao = await LanguageModel.create({ initialPrompts: opcoes.initialPrompts });
+  }
+  const saida = await sessao.prompt(texto);
+  sessao.destroy();
+  return limparResposta(saida);
 }
 
 /* ------------------------------------------------------------------ */

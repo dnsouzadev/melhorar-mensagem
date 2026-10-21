@@ -49,10 +49,20 @@ Na página da extensão → **Opções**:
 
 | Provedor | Custo | Chave em |
 |---|---|---|
+| **🆓 IA do navegador** | grátis, no seu PC (Chrome 138+) | — (sem chave) |
 | **OpenAI** | pago | platform.openai.com/api-keys |
 | **Groq** | níveis grátis generosos | console.groq.com/keys |
 | **OpenRouter** | alguns modelos grátis | openrouter.ai/keys |
 | **Ollama local** | grátis, sem nuvem | — (sem chave) |
+
+### IA do navegador (padrão, sem chave)
+
+A opção padrão usa a **Prompt API do Chrome** (Gemini Nano rodando no seu computador).
+Requisitos do PC: 22 GB livres no disco e 16 GB de RAM (ou GPU de 4+ GB).
+Na primeira vez, abra as **Opções → "Baixar modelo"**; depois funciona offline e
+nada do que você escreve sai do computador.
+
+> Só funciona no Chrome (138+); no Firefox escolha outro provedor nas opções.
 
 ### Ollama (opcional)
 

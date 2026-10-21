@@ -45,12 +45,27 @@
   <div class="campo">
     <label for="provider">Provedor</label>
     <select id="provider">
+      <option value="navegador">🆓 IA do navegador (roda no seu PC) — Chrome 138+</option>
       <option value="openai">OpenAI (ChatGPT) — pago</option>
       <option value="groq">Groq — rápido e tem nível grátis</option>
       <option value="openrouter">OpenRouter — vários modelos (alguns grátis)</option>
       <option value="ollama">Ollama local — Grátis, sem nuvem</option>
       <option value="custom">Personalizado (endpoint compatível com OpenAI)</option>
     </select>
+  </div>
+
+  <div class="campo" id="campoNavegador" hidden>
+    <p class="ajuda">
+      Sem chave e sem custo: usa o modelo Gemini Nano que fica no seu computador.
+      Requisitos: Chrome 138+, 22 GB livres no disco e 16 GB de RAM (ou GPU de 4+ GB).
+      A primeira vez exige internet para baixar o modelo; depois funciona offline e nada sai do seu PC.
+    </p>
+    <p id="iaStatus" class="ajuda">Verificando o modelo local…</p>
+    <button id="baixarModelo" type="button" hidden
+      style="padding:9px 16px;font:inherit;font-weight:600;border:0;border-radius:8px;background:#4f46e5;color:#fff;cursor:pointer">
+      Baixar modelo
+    </button>
+    <span id="iaProgresso" class="ajuda" style="margin-left:8px"></span>
   </div>
 
   <div class="campo">
