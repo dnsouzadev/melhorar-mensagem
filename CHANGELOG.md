@@ -3,6 +3,15 @@
 Formato semelhante ao [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.4.0] - 2026-10-20
+
+### Adicionado
+
+- Submenu "✨ Melhorar mensagem" com quatro estilos: **padrão** (profissional),
+  **🎩 Mais formal**, **✂️ Mais curto** e **🔤 Só corrigir gramática**.
+- O estilo escolhido é aplicado em todos os provedores (IA nativa do navegador
+  e APIs compatíveis com OpenAI).
+
 ## [0.3.0] - 2026-10-20
 
 ### Adicionado

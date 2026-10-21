@@ -1,6 +1,6 @@
 # Melhorar Mensagem
 
-Extensão de navegador (Chrome e Firefox) que melhora suas mensagens com IA **onde você escreve**: selecione o texto, clique com o direito em **"✨ Melhorar mensagem"** e pronto — a frase é corrigida e reescrita de forma mais profissional, direto no campo.
+Extensão de navegador (Chrome e Firefox) que melhora suas mensagens com IA **onde você escreve**: selecione o texto, clique com o direito em **"✨ Melhorar mensagem"** e escolha o estilo — padrão (profissional), mais formal, mais curto ou só corrigir a gramática. A frase é reescrita direto no campo.
 
 Sem abrir ChatGPT, sem copiar e colar.
 
@@ -96,7 +96,7 @@ git tag -a v0.2.0 -m "descrição"
 
 ## Ideias para as próximas versões
 
-- [ ] Mais estilos no menu: "Mais formal", "Mais curto", "Só corrigir gramática"
+- [x] Estilos no menu: "Mais formal", "Mais curto", "Só corrigir gramática" (v0.4.0)
 - [ ] Popup com prévia antes de substituir (aceitar/descartar)
 - [ ] Atalho de teclado (ex.: Alt+M) para o texto selecionado
 - [ ] Publicação nas lojas (Chrome Web Store e AMO)

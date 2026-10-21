@@ -28,15 +28,46 @@ const DEFAULTS = {
   temperature: 0.3,
 };
 
-const SYSTEM_PROMPT = [
-  "Você é um revisor de mensagens que o usuário vai enviar para outra pessoa (cliente, colega etc.).",
-  "Reescreva o texto recebido assim:",
-  "1. Corrija ortografia, gramática e pontuação.",
-  "2. Deixe a mensagem clara, direta e profissional, removendo gírias e redundâncias.",
-  "3. Mantenha exatamente o sentido original, bem como nomes próprios, números, links e códigos.",
-  "4. Responda no mesmo idioma do texto original.",
-  "5. Devolva SOMENTE o texto final: sem aspas, sem comentários, sem explicações.",
-].join(" ");
+const PROMPTS = {
+  melhorar: [
+    "Você é um revisor de mensagens que o usuário vai enviar para outra pessoa (cliente, colega etc.).",
+    "Reescreva o texto recebido assim:",
+    "1. Corrija ortografia, gramática e pontuação.",
+    "2. Deixe a mensagem clara, direta e profissional, removendo gírias e redundâncias.",
+    "3. Mantenha exatamente o sentido original, bem como nomes próprios, números, links e códigos.",
+    "4. Responda no mesmo idioma do texto original.",
+    "5. Devolva SOMENTE o texto final: sem aspas, sem comentários, sem explicações.",
+  ].join(" "),
+  formal: [
+    "Você reescreve mensagens em tom mais formal e profissional, apropriado para clientes e superiores.",
+    "1. Eleve o nível de formalidade sem ficar robótico ou cerimonioso demais.",
+    "2. Corrija ortografia, gramática e pontuação.",
+    "3. Mantenha exatamente o sentido original, bem como nomes próprios, números, links e códigos.",
+    "4. Responda no mesmo idioma do texto original.",
+    "5. Devolva SOMENTE o texto final: sem aspas, sem comentários, sem explicações.",
+  ].join(" "),
+  curto: [
+    "Você encurta mensagens mantendo a cortesia e a informação essencial.",
+    "1. Reescreva de forma curta e direta, removendo enrolação e redundâncias.",
+    "2. Corrija ortografia, gramática e pontuação.",
+    "3. Não corte nomes próprios, números, links, códigos nem pedidos centrais.",
+    "4. Responda no mesmo idioma do texto original.",
+    "5. Devolva SOMENTE o texto final: sem aspas, sem comentários, sem explicações.",
+  ].join(" "),
+  gramatica: [
+    "Você é um corretor ortográfico conservador.",
+    "1. Corrija APENAS erros de ortografia, gramática e pontuação.",
+    "2. Não mude o estilo, o tom, o tamanho nem substitua palavras: faça o mínimo de alterações possível.",
+    "3. Responda no mesmo idioma do texto original.",
+    "4. Devolva SOMENTE o texto corrigido: sem aspas, sem comentários, sem explicações.",
+  ].join(" "),
+};
+
+const ESTILO_PADRAO = "melhorar";
+
+function systemPrompt(estilo) {
+  return PROMPTS[estilo] || PROMPTS[ESTILO_PADRAO];
+}
 
 /* ------------------------------------------------------------------ */
 /* Captura do campo sob o menu de contexto                             */
@@ -66,14 +97,14 @@ function isEditable(el) {
 }
 
 api.runtime.onMessage.addListener((msg) => {
-  if (msg && msg.type === "melhorar") melhorar();
+  if (msg && msg.type === "melhorar") melhorar(msg.estilo);
 });
 
 /* ------------------------------------------------------------------ */
 /* Orquestração                                                        */
 /* ------------------------------------------------------------------ */
 
-async function melhorar() {
+async function melhorar(estilo = ESTILO_PADRAO) {
   const selecao = capturarSelecao();
   if (!selecao) {
     toast("Selecione um texto dentro do campo antes de melhorar.", "erro");
@@ -85,8 +116,8 @@ async function melhorar() {
     const cfg = await config();
     const melhorado =
       cfg.provider === "navegador"
-        ? await iaNavegador(selecao.texto, cfg.temperature)
-        : await chamarIA(cfg, selecao.texto);
+        ? await iaNavegador(selecao.texto, cfg.temperature, estilo)
+        : await chamarIA(cfg, selecao.texto, estilo);
     aplicar(selecao, melhorado);
     toast("✅ Mensagem melhorada (Ctrl+Z desfaz)", "ok");
   } catch (err) {
@@ -137,15 +168,16 @@ async function config() {
 /* IA do navegador (Chrome 138+: modelo Gemini Nano baixado no PC)     */
 /* ------------------------------------------------------------------ */
 
-async function iaNavegador(texto, temperatura) {
+async function iaNavegador(texto, temperatura, estilo = ESTILO_PADRAO) {
   // A API Prompt pode não estar exposta no content script dependendo da
   // versão do Chrome; nesse caso delegamos ao service worker da extensão.
-  if (typeof LanguageModel !== "undefined") return promptLocal(texto, temperatura);
+  if (typeof LanguageModel !== "undefined") return promptLocal(texto, temperatura, estilo);
 
   const resp = await api.runtime.sendMessage({
     type: "navegador-prompt",
     texto,
     temperature: Number(temperatura) || 0.3,
+    estilo,
   });
   if (!resp || !resp.ok) {
     throw new Error((resp && resp.erro) || "IA do navegador indisponível neste contexto.");
@@ -153,7 +185,7 @@ async function iaNavegador(texto, temperatura) {
   return resp.texto;
 }
 
-async function promptLocal(texto, temperatura) {
+async function promptLocal(texto, temperatura, estilo = ESTILO_PADRAO) {
   const estado = await LanguageModel.availability();
   if (estado === "unavailable") {
     throw new Error(
@@ -168,7 +200,7 @@ async function promptLocal(texto, temperatura) {
   let params = null;
   try { params = await LanguageModel.params(); } catch { /* segue sem ajuste */ }
 
-  let opcoes = { initialPrompts: [{ role: "system", content: SYSTEM_PROMPT }] };
+  let opcoes = { initialPrompts: [{ role: "system", content: systemPrompt(estilo) }] };
   if (params) {
     opcoes.topK = params.defaultTopK;
     opcoes.temperature = Math.min(
@@ -200,7 +232,7 @@ class ErroAPI extends Error {
   }
 }
 
-async function chamarIA(cfg, texto) {
+async function chamarIA(cfg, texto, estilo = ESTILO_PADRAO) {
   if (!cfg.baseUrl) throw new Error("Configure o provedor de IA nas opções da extensão.");
   const url = cfg.baseUrl.replace(/\/+$/, "") + "/chat/completions";
 
@@ -222,7 +254,7 @@ async function chamarIA(cfg, texto) {
         model: cfg.model,
         temperature: Number(cfg.temperature) || 0.3,
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt(estilo) },
           { role: "user", content: texto },
         ],
       }),
