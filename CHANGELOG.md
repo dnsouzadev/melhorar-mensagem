@@ -3,6 +3,16 @@
 Formato semelhante ao [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.0] - 2026-10-20
+
+### Adicionado
+
+- Configuração inicial na primeira instalação: assistente que pergunta como o
+  usuário quer usar a IA (navegador / Groq / OpenAI / outros), com teste da
+  chave e do modelo local antes de salvar.
+- A instalação abre o assistente automaticamente; "configurar depois" também
+  sai dele sem travar nada.
+
 ## [0.2.0] - 2026-10-20
 
 ### Adicionado

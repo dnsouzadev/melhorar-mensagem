@@ -23,6 +23,8 @@ CONTEUDO_LIVRE = [
     "content.js",
     "options.html",
     "options.js",
+    "onboarding.html",
+    "onboarding.js",
     "assets",
 ]
 

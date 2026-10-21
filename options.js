@@ -208,13 +208,13 @@ els.temperature.addEventListener("input", () => {
 });
 
 els.salvar.addEventListener("click", async () => {
-  await api.storage.local.set(lerFormulario());
+  await api.storage.local.set({ ...lerFormulario(), setupDone: true });
   setStatus("✓ Configuração salva.", "ok");
 });
 
 els.testar.addEventListener("click", async () => {
   const cfg = lerFormulario();
-  await api.storage.local.set(cfg);
+  await api.storage.local.set({ ...cfg, setupDone: true });
   setStatus("Testando…", "ok");
   try {
     if (cfg.provider === "navegador") {

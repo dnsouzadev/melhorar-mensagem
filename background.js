@@ -9,7 +9,16 @@ const api = globalThis.browser ?? globalThis.chrome;
 
 const ID_MENU = "melhorar-mensagem";
 
-api.runtime.onInstalled.addListener(criarMenus);
+api.runtime.onInstalled.addListener((detalhes) => {
+  criarMenus();
+  if (detalhes && detalhes.reason === "install") abrirConfiguracaoInicial();
+});
+
+async function abrirConfiguracaoInicial() {
+  const { setupDone } = await api.storage.local.get({ setupDone: false });
+  if (setupDone) return;
+  api.tabs.create({ url: api.runtime.getURL("onboarding.html") });
+}
 if (api.runtime.onStartup) api.runtime.onStartup.addListener(criarMenus);
 
 function criarMenus() {

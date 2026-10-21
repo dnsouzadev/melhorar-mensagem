@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Melhorar Mensagem — Primeira configuração</title>
+  <style>
+    :root { color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body {
+      font: 15px/1.5 system-ui, sans-serif;
+      max-width: 540px;
+      margin: 48px auto;
+      padding: 0 20px;
+    }
+    h1 { font-size: 22px; margin: 0 0 6px; }
+    p.sub { color: #888; margin: 0 0 26px; font-size: 14px; }
+    .card {
+      border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px 16px;
+      cursor: pointer; margin-bottom: 12px; transition: border-color .15s;
+    }
+    .card:hover { border-color: #a5b4fc; }
+    .card h3 { margin: 0 0 4px; font-size: 15px; }
+    .card p { margin: 0; color: #888; font-size: 13px; }
+    .card.desabilitado { opacity: .45; cursor: not-allowed; }
+    .card.ja { border-color: #4f46e5; background: #eef2ff; }
+    .passo { margin-top: 8px; }
+    .passo h2 { font-size: 17px; }
+    .campo { margin: 16px 0; }
+    input {
+      width: 100%; padding: 9px 12px; border-radius: 8px;
+      border: 1px solid #ccc; font: inherit; background: transparent;
+    }
+    input:focus { outline: 2px solid #4f46e5; border-color: transparent; }
+    .ajuda { color: #888; font-size: 13px; margin: 6px 0 0; }
+    button {
+      padding: 10px 18px; border: 0; border-radius: 8px; font: inherit;
+      font-weight: 600; cursor: pointer;
+    }
+    .primario { background: #4f46e5; color: #fff; }
+    button:disabled { opacity: .5; cursor: wait; }
+    .secundario { background: #f3f4f6; margin-left: 8px; }
+    .status { margin-top: 14px; min-height: 22px; font-size: 14px; }
+    .ok { color: #16a34a; }
+    .erro { color: #dc2626; }
+    .duasColunas { display: flex; gap: 14px; }
+    .duasColunas > div { flex: 1; }
+    a { color: #4f46e5; }
+  </style>
+</head>
+<body>
+  <div id="passo0">
+    <h1>✨ Melhorar Mensagem</h1>
+    <p class="sub">
+      Escolha como a IA vai melhorar seus textos — você pode trocar depois nas opções.
+    </p>
+
+    <div id="cardNavegador" class="card" data-provedor="navegador">
+      <h3>🆓 IA do navegador &nbsp;<small>padrão</small></h3>
+      <p>Sem chave: o modelo roda no seu PC (Chrome 138+). Nada sai do computador.</p>
+    </div>
+
+    <div class="card" data-provedor="groq">
+      <h3>🆓 Groq &nbsp;<small>grátis com chave gratuita</small></h3>
+      <p>Rápido e com nível de uso gratuito. Você cria uma chave em console.groq.com (leva 1 minuto).</p>
+    </div>
+
+    <div class="card" data-provedor="openai">
+      <h3>🔑 OpenAI (ChatGPT)</h3>
+      <p>API paga por uso (independe da assinatura do ChatGPT). Chave em platform.openai.com/api-keys.</p>
+    </div>
+
+    <div class="card" data-provedor="outros">
+      <h3>🧰 Outros (OpenRouter, Ollama, personalizados)</h3>
+      <p>Mais pontos de acesso compatíveis com OpenAI — na página completa de opções.</p>
+    </div>
+  </div>
+
+  <div id="passoNavegador" class="passo" hidden>
+    <h2>🆓 IA do navegador</h2>
+    <p id="navTexto">Verificando o modelo local…</p>
+    <button id="navBaixar" type="button" class="primario" hidden>Baixar modelo</button>
+    <span id="navProgresso" class="ajuda"></span>
+  </div>
+
+  <div id="passoChave" class="passo" hidden>
+    <h2 id="chaveTitulo">Provedor escolhido</h2>
+    <div class="campo">
+      <label for="chaveInput">Chave da API</label>
+      <input id="chaveInput" type="password" placeholder="cole a chave aqui" autocomplete="off" />
+      <p class="ajuda" id="chaveLink"></p>
+    </div>
+    <button id="chaveContinuar" type="button" class="primario">Testar e salvar</button>
+    <button id="chaveVoltar" type="button" class="secundario">Voltar</button>
+  </div>
+
+  <div id="passoFim" hidden>
+    <h2>🎉 Pronto!</h2>
+    <p class="duasColunas" style="display:block">
+    <strong>Como usar:</strong><br>
+    1. Escreva uma frase (torta, tá bom 😉)<br>
+    2. Selecione o texto<br>
+    3. Clique com o direito → <strong>✨ Melhorar mensagem</strong>
+    </p>
+    <p class="ajuda">Não gostou do resultado? Ctrl+Z desfaz.</p>
+    <button id="fimOpcoes" type="button" class="primario">Ajustes avançados</button>
+    <p class="ajuda">
+      É só testar de verdade: escreva, selecione e clique com o direito em qualquer site que você usa.
+    </p>
+    <p class="ajuda"><a href="#" id="fimFechar">Fechar esta página</a></p>
+  </div>
+
+  <div id="obStatus" class="status"></div>
+
+  <script src="onboarding.js"></script>
+</body>
+</html>

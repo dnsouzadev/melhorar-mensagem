@@ -45,7 +45,7 @@ python3 build.py            # gera dist/chrome e dist/firefox
 
 ## Configurar
 
-Na página da extensão → **Opções**:
+Na página da extensão → **Opções** (na instalação, um assistente já pergunta sua escolha):
 
 | Provedor | Custo | Chave em |
 |---|---|---|
