@@ -94,10 +94,19 @@ Seu e-mail público (obrigatório no formulário; aparece para o usuário final 
 Formato: PNG/JPEG recomendado 1280×800 ou 700×528. Use os `docs/img/*.png`
 (já nessa proporção de janela) — reordene: menu de contexto em uso primeiro.
 
-## 4. Licença no formulário
+## 4. Licença e fonte
 
 - **Licença**: marque **MIT/X11 License** (é a que o projeto usa).
 - Preencha **Source Code URL** com https://github.com/dnsouzadev/melhorar-mensagem
+
+## 4b. "Do you need to submit source code?" → **No**
+
+Responda **No** e é verdade: a extensão é JavaScript puro, escrito à mão,
+sem bundler, minificador, transpilador, template engine ou qualquer geração
+de código. O `build.py` apenas **copia** os arquivos para `dist/` e empacota
+o `.zip` — o manifesto do Firefox (`manifest.firefox.json`) também é escrito
+à mão. O repositório público tem o código-fonte completo, caso o revisor
+quire conferir.
 
 ## 5. Coleta de dados (formulário)
 
@@ -117,8 +126,9 @@ OpenAI), em uma ação explícita do usuário via menu de contexto.
 ### Notas para o revisor (cole em "Notes for reviewers")
 
 ```
-Add-on de utilidade em pt-BR; código simples e comentado em JavaScript puro
-(sem build/bundler). Estrutura:
+Add-on de utilidade em pt-BR; código simples e comentado em JavaScript puro,
+escrito à mão (sem bundler, minificador, transpilador ou geração de código).
+O build.py apenas copia os arquivos para dist/ e empacota o .zip. Estrutura:
 • background.js — cria o submenu de contexto (✨ Melhorar mensagem) e atua como
   fallback do Prompt API.
 • content.js — captura a seleção, chama a API do provedor configurado pelo
@@ -148,7 +158,7 @@ amigável por toast.
 ## 8. Checklist final antes de enviar
 
 - [ ] `npx addons-linter dist/firefox.zip` → 0 errors / 0 warnings
-- [ ] Versão no `dist/firefox/manifest.json` a próxima (0.5.1)
+- [ ] Versão no `dist/firefox/manifest.json` é a próxima (0.5.2)
 - [ ] ZIP contém manifest no diretório raiz (não dobrar em pasta)
 - [ ] Textos acima copiados
 - [ ] 2-3 screenshots em anexo

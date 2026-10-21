@@ -3,6 +3,15 @@
 Formato semelhante ao [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.2] - 2026-10-20
+
+### Alterado
+
+- Manifestos agora são **dois arquivos estáticos escritos à mão** (`manifest.json`
+  para o Chrome e `manifest.firefox.json` para o Firefox); o `build.py` apenas
+  copia e empacota, sem gerar nenhum arquivo. Isso mantém verdadeira a resposta
+  "No" da pergunta de código-fonte do formulário de publicação do AMO.
+
 ## [0.5.1] - 2026-10-20
 
 ### Corrigido

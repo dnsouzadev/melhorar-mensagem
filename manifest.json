@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Melhorar Mensagem",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Selecionou, clicou com o direito, melhorou: corrige ortografia e reformula sua mensagem com IA antes de enviar.",
   "icons": {
     "16": "assets/icons/icon16.png",

@@ -137,13 +137,14 @@ Toast de confirmação aparece na parte inferior da tela. Erros trazem a causa (
 ## 🛠️ Desenvolvimento
 
 ```
-manifest.json      manifesto base (Chrome); Firefox é gerado por build.py
-background.js      submenu de contexto, abertura do assistente, IA nativa (fallback)
-content.js         captura a seleção, chama a IA, substitui o texto
-options.html/js    configuração completa (provedor, chave, modelo, teste de conexão)
-onboarding.html/js assistente de primeira configuração
-build.py           gera dist/chrome e dist/firefox (+ .zip prontos para lojas)
-docs/img           prints usados nos READMEs
+manifest.json          manifesto do Chrome (escrito à mão)
+manifest.firefox.json  manifesto do Firefox (escrito à mão; gecko/MV3)
+background.js          submenu de contexto, abertura do assistente, IA nativa (fallback)
+content.js             captura a seleção, chama a IA, substitui o texto
+options.html/js        configuração completa (provedor, chave, modelo, teste de conexão)
+onboarding.html/js     assistente de primeira configuração
+build.py               copia os arquivos para dist/ e empacota os .zip (não gera código)
+docs/img               prints usados nos READMEs
 ```
 
 - **Modo demonstração**: abrir `options.html` ou `onboarding.html` direto no navegador (sem instalar a extensão) ativa uma emulação do `chrome.storage` e da `LanguageModel` — útil para ajustar layout e capturar prints.

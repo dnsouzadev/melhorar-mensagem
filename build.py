@@ -5,8 +5,12 @@ Uso:
     python3 build.py
 
 Cria:
-    dist/chrome/   + dist/chrome.zip     (manifest de service worker)
-    dist/firefox/  + dist/firefox.zip    (background como script + ID do Gecko)
+    dist/chrome/   + dist/chrome.zip     (usa manifest.json)
+    dist/firefox/  + dist/firefox.zip    (usa manifest.firefox.json)
+
+Importante: nenhum código é gerado por este script — ele apenas COPIA os
+arquivos escritos por humanos e empacota. Isso é requisito do processo de
+revisão do AMO, que pergunta sobre ferramentas de geração de código.
 """
 
 import json
@@ -17,7 +21,7 @@ from pathlib import Path
 RAIZ = Path(__file__).parent
 DIST = RAIZ / "dist"
 
-# Arquivos/pastas que vão para ambos os navegadores.
+# Arquivos/pastas que vão para ambos os navegadores (todos manuais, nenhum gerado).
 CONTEUDO_LIVRE = [
     "background.js",
     "content.js",
@@ -28,11 +32,8 @@ CONTEUDO_LIVRE = [
     "assets",
 ]
 
-GECKO_ID = "melhorar-mensagem@daniel"  # identificador único do Firefox (não precisa ser e-mail)
-GECKO_MIN = "142.0"  # mínimo que suporta "data_collection_permissions" (exigido pela Mozilla)
 
-
-def copiar_conteudo(para: Path) -> None:
+def copiar_conteudo(para: Path, manifest_destino: Path, manifest_source: str) -> None:
     para.parent.mkdir(parents=True, exist_ok=True)
     for nome in CONTEUDO_LIVRE:
         origem = RAIZ / nome
@@ -44,61 +45,46 @@ def copiar_conteudo(para: Path) -> None:
             shutil.copy2(origem, destino)
         else:
             raise SystemExit(f"Faltando arquivo esperado no projeto: {nome}")
-
-
-def gravar_json(manifest: dict, para: Path) -> None:
-    para.write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    shutil.copy2(RAIZ / manifest_source, manifest_destino)
 
 
 def zipar(pasta: Path, alvo: Path) -> None:
     with zipfile.ZipFile(alvo, "w", zipfile.ZIP_DEFLATED) as z:
-        # determinismo: sempre pela ordem de arquivos
         for arquivo in sorted(pasta.rglob("*")):
             if arquivo.is_file():
                 z.write(arquivo, arquivo.relative_to(pasta).as_posix())
 
 
-def main() -> None:
-    manifest_base = json.loads((RAIZ / "manifest.json").read_text(encoding="utf-8"))
+def verificar_manifests() -> None:
+    chrome = json.loads((RAIZ / "manifest.json").read_text(encoding="utf-8"))
+    firefox = json.loads((RAIZ / "manifest.firefox.json").read_text(encoding="utf-8"))
+    if chrome["version"] != firefox["version"]:
+        raise SystemExit(
+            f"Versões divergentes: manifest.json='{chrome['version']}' "
+            f"manifest.firefox.json='{firefox['version']}'. Atualize as duas."
+        )
+    print(f"✔ manifests sincronizados na versão {chrome['version']}")
 
+
+def main() -> None:
+    verificar_manifests()
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir()
 
-    # ---- Chrome -----------------------------------------------------
     pasta_chrome = DIST / "chrome"
-    copiar_conteudo(pasta_chrome)
-    gravar_json(manifest_base, pasta_chrome / "manifest.json")
+    copiar_conteudo(pasta_chrome, pasta_chrome / "manifest.json", "manifest.json")
     zipar(pasta_chrome, DIST / "chrome.zip")
 
-    # ---- Firefox ----------------------------------------------------
     pasta_fx = DIST / "firefox"
-    copiar_conteudo(pasta_fx)
-    m = json.loads(json.dumps(manifest_base))  # cópia profunda
-    m["background"] = {"scripts": ["background.js"]}  # Firefox: event page, não service worker
-    gecko = {"id": GECKO_ID, "strict_min_version": GECKO_MIN}
-    # Requisito novo da Mozilla: declaração de coleta de dados. A extensão
-    # não coleta nada (o texto selecionado vai apenas ao provedor que o
-    # usuário escolher, em ação dele). "none" declara isso ao Firefox.
-    gecko["data_collection_permissions"] = {"required": ["none"]}
-    m["browser_specific_settings"] = {"gecko": gecko}
-    gravar_json(m, pasta_fx / "manifest.json")
+    copiar_conteudo(pasta_fx, pasta_fx / "manifest.json", "manifest.firefox.json")
     zipar(pasta_fx, DIST / "firefox.zip")
 
     for nome in ("chrome", "firefox"):
         pasta = DIST / nome
         zip = DIST / f"{nome}.zip"
-        print(f"✔ dist/{nome}/  ({tamanho(pasta)})  → {zip.name} ({tamanho(zip)})")
-
-
-def tamanho(p: Path) -> str:
-    n = sum(1 for f in p.rglob("*") if f.is_file()) if p.is_dir() else 0
-    if n:
-        return f"{n} arquivos"
-    return f"{p.stat().st_size / 1024:.1f} KB" if p.exists() else "ausente"
+        n = sum(1 for f in pasta.rglob("*") if f.is_file())
+        print(f"✔ dist/{nome}/  ({n} arquivos)  → {zip.name}")
 
 
 if __name__ == "__main__":
