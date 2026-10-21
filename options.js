@@ -1,6 +1,27 @@
 /* Melhorar Mensagem — página de opções */
 
-const api = globalThis.browser ?? globalThis.chrome;
+const api = globalThis.browser ?? globalThis.chrome ?? criarApiDemo();
+
+/* Modo demonstração: quando as páginas são abertas direto no navegador (sem
+   extensão), o armazenamento e a IA interna são emulados. Assim dá
+   para testar visualmente o layout e capturar prints de documentação. */
+function criarApiDemo() {
+  globalThis.LanguageModel = {
+    availability: async () => "available",
+    params: async () => ({ defaultTopK: 3, defaultTemperature: 1, maxTemperature: 2 }),
+    create: async () => ({ prompt: async () => "ok", destroy() {} }),
+  };
+  return {
+    storage: {
+      local: {
+        get: async (padroes) => ({ ...padroes }),
+        set: async () => {},
+      },
+    },
+    runtime: { openOptionsPage() {} },
+    tabs: { create() {}, remove() {}, query: async () => [] },
+  };
+}
 
 const PRESETS = {
   navegador: {}, // IA nativa: sem endpoint, modelo ou chave

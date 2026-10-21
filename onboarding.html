@@ -45,6 +45,10 @@
     .duasColunas { display: flex; gap: 14px; }
     .duasColunas > div { flex: 1; }
     a { color: #4f46e5; }
+    .rodape {
+      margin-top: 34px; padding-top: 14px; border-top: 1px solid #e5e7eb;
+      color: #888; font-size: 13px; text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -55,13 +59,13 @@
     </p>
 
     <div id="cardNavegador" class="card" data-provedor="navegador">
-      <h3>🆓 IA do navegador &nbsp;<small>padrão</small></h3>
-      <p>Sem chave: o modelo roda no seu PC (Chrome 138+). Nada sai do computador.</p>
+      <h3>IA do navegador &nbsp;<small style="color:#16a34a">grátis · padrão</small></h3>
+      <p style="margin-top:4px">Sem chave: o modelo roda no seu PC (Chrome 138+). Nada sai do computador.</p>
     </div>
 
     <div class="card" data-provedor="groq">
-      <h3>🆓 Groq &nbsp;<small>grátis com chave gratuita</small></h3>
-      <p>Rápido e com nível de uso gratuito. Você cria uma chave em console.groq.com (leva 1 minuto).</p>
+      <h3>Groq &nbsp;<small style="color:#16a34a">grátis · chave gratuita</small></h3>
+      <p style="margin-top:4px">Rápido e com nível de uso gratuito. Você cria uma chave em console.groq.com (leva 1 minuto).</p>
     </div>
 
     <div class="card" data-provedor="openai">
@@ -110,6 +114,12 @@
   </div>
 
   <div id="obStatus" class="status"></div>
+
+  <footer class="rodape">
+    Desenvolvido com 💜 por
+    <a href="https://github.com/dnsouzadev/melhorar-mensagem" target="_blank" rel="noopener"><strong>dnsouzadev</strong></a>
+    &nbsp;·&nbsp; open source no GitHub
+  </footer>
 
   <script src="onboarding.js"></script>
 </body>

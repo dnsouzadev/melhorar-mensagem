@@ -3,6 +3,18 @@
 Formato semelhante ao [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.0] - 2026-10-20
+
+### Adicionado
+
+- README completo bilíngue (pt-BR e English) com prints das telas, gerados
+  por Firefox headless (docs/img).
+- Crédito "Desenvolvido por dnsouzadev" com atalho para o GitHub no rodapé
+  do assistente de configuração inicial.
+- Licença MIT.
+- Modo demonstração nas páginas de opções/assistente: abertas sem a extensão,
+  emulam o storage e a IA para visualização e capturas de tela.
+
 ## [0.4.0] - 2026-10-20
 
 ### Adicionado
